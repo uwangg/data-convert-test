@@ -1,8 +1,9 @@
 // npm install xlsx
 var XLSX = require('xlsx');
+var fs = require('fs');
 
 function readExcelFile(fileName, sheetIdx) {
-	var workbook = XLSX.readFile('./data/' + fileName);
+	var workbook = XLSX.readFile('./data/' + fileName + '.xlsx');
 	var sheetNameList = workbook.SheetNames;	// sheetList
 	var worksheet = workbook.Sheets[sheetNameList[sheetIdx]];	// 선택한 sheet 내용
 	
@@ -34,17 +35,19 @@ function readExcelFile(fileName, sheetIdx) {
 // var data = readExcelFile(fileName, sheetIdx);
 
 var fileList = [{
-	"fileName": "동네예보조회서비스_격자_위경도.xlsx",
+	"fileName": "동네예보조회서비스_격자_위경도",
 	"sheetIdx": 0
 },
 {
-	"fileName": "KIKmix.20180301.xlsx",
+	"fileName": "KIKmix.20180301",
 	"sheetIdx": 0
 }];
 
-var dataList = [];
 for(var i = 0 ; i < fileList.length ; i++){
-	if(i == 0) continue;
+	//if(i == 0) continue;
 	var file = fileList[i];
-	dataList.push(readExcelFile(file['fileName'], file['sheetIdx']));
+	var data = readExcelFile(file['fileName'], file['sheetIdx']);
+	// console.log(JSON.stringify(data));
+	fs.writeFileSync('./output/' + file['fileName'] + '.json', JSON.stringify(data));
+//	dataList.push(readExcelFile(file['fileName'], file['sheetIdx']));
 }
